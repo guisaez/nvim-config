@@ -17,7 +17,7 @@ return {
 		"folke/which-key.nvim",
 		event = "VimEnter",
 		opts = {
-			delay = 0,
+			delay = 300,
 			icons = {
 				mappings = vim.g.have_nerd_font,
 				keys = vim.g.have_nerd_font and {} or {
@@ -64,6 +64,7 @@ return {
 	},
 	{
 		"folke/todo-comments.nvim",
+		cond = not vim.env.SSH_TTY,
 		event = "VimEnter",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		opts = { signs = false },
@@ -165,14 +166,15 @@ return {
 	{
 		"nvim-neo-tree/neo-tree.nvim",
 		branch = "v3.x",
+		cmd = { "Neotree" },
+		keys = {
+			{ "<leader>e", "<cmd>Neotree toggle<CR>", desc = "Explorer (neo-tree)" },
+		},
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"nvim-tree/nvim-web-devicons",
 			"MunifTanjim/nui.nvim",
 		},
-		config = function()
-			vim.keymap.set("n", "<leader>e", "<cmd>Neotree toggle<CR>", { desc = "Explorer (neo-tree)" })
-		end,
 	},
 	{
 		"catppuccin/nvim",

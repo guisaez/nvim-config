@@ -14,7 +14,6 @@ vim.keymap.set("n", "<leader>Y", '"+Y')
 vim.keymap.set({ "n", "v" }, "<leader>p", '"+p')
 
 -- LSP
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { desc = "[f]ormat buffer" })
 vim.keymap.set("n", "<leader>dq", vim.diagnostic.setloclist, { desc = "[d]iagnostic [q]uickfix" })
 vim.keymap.set("n", "<leader>df", vim.diagnostic.open_float, { desc = "[d]iagnostic [f]loat" })
 

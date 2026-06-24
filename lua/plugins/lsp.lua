@@ -38,7 +38,7 @@ return {
 					map("gi", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
 					map("K", vim.lsp.buf.hover, "[H]over documentation")
 					map("<leader>D", require("telescope.builtin").lsp_type_definitions, "[G]oto type [D]efinition")
-					map("<leader>ss", require("telescope.builtin").lsp_document_symbols, "[S]earch document [S]ymbols")
+					map("<leader>sS", require("telescope.builtin").lsp_document_symbols, "[S]earch document [S]ymbols")
 					map(
 						"<leader>sW",
 						require("telescope.builtin").lsp_dynamic_workspace_symbols,
@@ -127,10 +127,14 @@ return {
 			-- Erlang configs in `lsp/` enabled from lua/lsp.lua.
 			vim.lsp.config("*", { capabilities = capabilities })
 
-			local mason_install = {
-				"lua_ls",
-				"lexical",
-			}
+			local nvim_profiles = os.getenv("NVIM_PROFILES") or ""
+			local beam_active = nvim_profiles == "all"
+				or nvim_profiles:find("beam", 1, true) ~= nil
+
+			local mason_install = { "lua_ls" }
+			if beam_active then
+				table.insert(mason_install, "lexical")
+			end
 
 			local servers = {
 				lua_ls = {

@@ -1,8 +1,7 @@
 -- Make linenumbers default
 vim.o.number = true
 
--- You can also add relative line numbers, to help with jumping around
-vim.o.relativenumber = true
+vim.o.relativenumber = not vim.env.SSH_TTY
 
 vim.o.tabstop = 4
 vim.o.softtabstop = 4
@@ -58,7 +57,7 @@ vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
 vim.o.inccommand = "split"
 
-vim.o.cursorline = true
+vim.o.cursorline = not vim.env.SSH_TTY
 
 vim.o.scrolloff = 10
 

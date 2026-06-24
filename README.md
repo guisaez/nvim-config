@@ -14,124 +14,98 @@ lsp/                -- declarative LSP server configs (auto-loaded by 0.12)
 lua/
   lsp.lua           -- Erlang LSP selection logic (reads env)
   plugins/          -- lazy.nvim plugin specs
+    lsp.lua         -- LSP, completion (blink.cmp), formatting (conform)
+    treesitter.lua  -- nvim-treesitter + profile-based parser install
+    ui.lua          -- telescope, neo-tree, gitsigns, which-key, mini, catppuccin
+    claude.lua      -- claudecode.nvim + profile switching
   custom/           -- options, keymaps, autocmds
 ```
 
-Most language servers (`lua_ls`, `lexical`) are installed and started
-automatically through Mason — no action needed. Erlang is the exception:
-its server is **chosen by an environment variable** and the binary must be
-installed yourself.
+## Environment variables
 
-## Erlang LSP
+Two environment variables control which tooling is activated. Set them in
+your shell profile or per-project via direnv.
 
-Neovim 0.12 auto-loads every file under `lsp/` as a server config. Which
-one actually starts is decided at startup by `lua/lsp.lua` based on the
-`NVIM_ERLANG_LSP` environment variable.
+### `NVIM_PROFILES` — parser profiles and LSP tooling
 
-| `NVIM_ERLANG_LSP` | Server started | Required binary on `PATH` |
-| ----------------- | -------------- | ------------------------- |
-| `elp`             | erlang-language-platform | `elp` |
-| `erlangls`        | erlang_ls      | `erlang_ls` |
-| unset / other     | none           | — |
+Controls which Treesitter parsers are installed **and** which Mason LSP
+servers are set up. Profiles are named bundles:
 
-If the variable names a server but its binary is missing from `PATH`,
-Neovim starts normally and prints a warning instead of attaching.
-
-### Choosing a server
-
-- **`elp`** — Meta's [erlang-language-platform](https://github.com/WhatsApp/erlang-language-platform).
-  Faster, better diagnostics/hover; preferred for rebar3 projects.
-- **`erlangls`** — [erlang_ls](https://github.com/erlang-ls/erlang_ls).
-  More mature, broader feature coverage on older codebases.
-
-### Installing the binary
-
-**elp** — download a release binary and put it on your `PATH`:
-
-```sh
-# macOS (Homebrew tap) or grab from GitHub releases
-brew install elp            # if available, otherwise:
-# https://github.com/WhatsApp/erlang-language-platform/releases
-```
-
-**erlang_ls** — build from source (needs Erlang/OTP + rebar3):
-
-```sh
-git clone https://github.com/erlang-ls/erlang_ls
-cd erlang_ls && make && cp _build/default/bin/erlang_ls ~/.local/bin/
-```
-
-### Selecting per environment
-
-Set the variable wherever you launch Neovim. Examples:
-
-```sh
-# one-off
-NVIM_ERLANG_LSP=elp nvim
-
-# per machine / shell profile (~/.zshrc, ~/.bashrc)
-export NVIM_ERLANG_LSP=erlangls
-
-# per project, via direnv (.envrc)
-export NVIM_ERLANG_LSP=elp
-```
-
-Leaving it unset disables the Erlang LSP entirely — useful on machines
-where neither binary is installed.
-
-### Project root detection
-
-Both servers attach when one of these markers is found walking up from the
-file: `rebar.config`, `.git`, plus `erlang.mk` (elp) or `erlang_ls.config`
-(erlang_ls). Because `.git` is included, the server will attach to any
-`.erl` file inside a git repo even without a build file.
-
-## Treesitter parsers (`NVIM_PROFILES`)
-
-Parsers are managed by `lua/custom/autocmds.lua` using Neovim's **built-in**
-`vim.treesitter.install` (0.12+) — there is no `nvim-treesitter` plugin and
-no `:TSInstall`. On startup the config installs any missing parsers for the
-**active profiles**, then starts Treesitter per-buffer for filetypes that
-have a parser.
-
-Which parsers are active is controlled by the `NVIM_PROFILES` environment
-variable. Profiles are named bundles of parsers:
-
-| Profile   | Parsers |
-| --------- | ------- |
-| `core`    | bash, lua, luadoc, vim, vimdoc, markdown, markdown_inline, diff, query |
-| `web`     | html, css, javascript, typescript, tsx |
-| `beam`    | erlang, elixir, heex |
-| `systems` | c, rust, zig, cpp |
-| `infra`   | dockerfile, yaml, toml, json |
+| Profile   | Treesitter parsers | Extra LSP |
+| --------- | ------------------ | --------- |
+| `core`    | bash, lua, luadoc, vim, vimdoc, markdown, markdown_inline, diff, query | — |
+| `web`     | html, css, javascript, typescript, tsx | — |
+| `beam`    | erlang, elixir, heex | `lexical` (Elixir LS via Mason) |
+| `systems` | c, rust, zig, cpp | — |
+| `infra`   | dockerfile, yaml, toml, json | — |
 
 Selection rules:
 
 - **Unset** → defaults to `core`.
-- **Comma-separated list** → union of those profiles (unknown names are
-  ignored). E.g. `core,beam`.
+- **Comma-separated list** → union of those profiles. E.g. `core,beam`.
 - **`all`** → every profile.
 
 ```sh
-# one-off: Erlang/Elixir work this session
+# one-off
 NVIM_PROFILES=core,beam nvim
 
-# per machine / shell profile (~/.zshrc, ~/.bashrc)
+# per machine (~/.zshrc, ~/.bashrc)
 export NVIM_PROFILES=core,web,beam
 
 # everything
 NVIM_PROFILES=all nvim
 ```
 
-> Requires Neovim 0.12+ for `vim.treesitter.install`. To add a new language,
-> drop its parser into the relevant profile table in
-> `lua/custom/autocmds.lua`.
+Parsers are managed by `nvim-treesitter` (main branch). On startup, any
+missing parsers for the active profiles are installed automatically. Parser
+management lives in `lua/plugins/treesitter.lua`.
 
-### Combining with the Erlang LSP
+`lexical` (the Elixir language server) is only added to Mason's install list
+when the `beam` profile is active. On machines without an Elixir environment,
+leave `beam` out of `NVIM_PROFILES` to skip it entirely.
 
-For an Erlang session you typically want both the `beam` parser profile and
-an Erlang language server:
+### `NVIM_ERLANG_LSP` — Erlang language server
+
+Neovim 0.12 auto-loads every file under `lsp/` as a server config. Which
+one actually starts is decided at startup by `lua/lsp.lua`:
+
+| `NVIM_ERLANG_LSP` | Server started           | Required binary on `PATH` |
+| ----------------- | ------------------------ | ------------------------- |
+| `elp`             | erlang-language-platform | `elp`                     |
+| `erlangls`        | erlang_ls                | `erlang_ls`               |
+| unset / other     | none                     | —                         |
+
+If the variable names a server but its binary is missing from `PATH`,
+Neovim starts normally and prints a warning instead of attaching.
+
+- **`elp`** — Meta's [erlang-language-platform](https://github.com/WhatsApp/erlang-language-platform).
+  Faster, better diagnostics; preferred for rebar3 projects.
+- **`erlangls`** — [erlang_ls](https://github.com/erlang-ls/erlang_ls).
+  More mature, broader feature coverage on older codebases.
+
+```sh
+# Install elp (macOS)
+brew install elp
+# or grab a release binary: https://github.com/WhatsApp/erlang-language-platform/releases
+
+# Install erlang_ls (needs Erlang/OTP + rebar3)
+git clone https://github.com/erlang-ls/erlang_ls
+cd erlang_ls && make && cp _build/default/bin/erlang_ls ~/.local/bin/
+```
+
+### Combining both
+
+For an Erlang/Elixir session you typically want both:
 
 ```sh
 NVIM_PROFILES=core,beam NVIM_ERLANG_LSP=elp nvim
 ```
+
+## Remote / SSH usage
+
+When `SSH_TTY` is set the config automatically reduces rendering and I/O
+overhead:
+
+- `relativenumber` and `cursorline` are disabled (fewer redraws over the wire)
+- `todo-comments` is disabled (no file scanning on open)
+- `checktime` only fires on `FocusGained`, not on every buffer switch

@@ -25,21 +25,13 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 -- Trigger checktime to pickup external file changes (e.g. from Claude Code)
-vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
-	desc = "Reload files changed outisde Neovim",
+vim.api.nvim_create_autocmd("FocusGained", {
+	desc = "Reload files changed outside Neovim",
 	callback = function()
 		vim.cmd("checktime")
 	end,
 })
 
-vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-	desc = "Reload files changed outside of Neovim",
-	callback = function()
-		if vim.fn.mode() ~= "c" then
-			vim.cmd("checktime")
-		end
-	end,
-})
 
 vim.api.nvim_create_autocmd("BufWritePre", {
 	pattern = "*.go",
