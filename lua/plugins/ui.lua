@@ -58,6 +58,7 @@ return {
 				{ "<leader>t", group = "[T]ab" },
 				{ "<leader>T", group = "[T]oggle" },
 				{ "<leader>w", group = "[W]indow" },
+				{ "<leader>g", group = "[G]it" },
 				{ "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
 			},
 		},
