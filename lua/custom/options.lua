@@ -31,7 +31,8 @@ else
 		paste = { ["+"] = "pbpaste", ["*"] = "pbpaste" },
 	}
 end
-vim.o.clipboard = "unnamedplus"
+-- Don't auto-sync all registers to system clipboard.
+-- Use <leader>y / <leader>p for intentional clipboard ops.
 
 -- Enable break indent
 vim.o.breakindent = true
