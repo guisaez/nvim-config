@@ -14,7 +14,7 @@ local servers = {
 local server = servers[erlang_lsp]
 if server then
 	if vim.fn.executable(server) == 1 then
-		vim.lsp.enable(erlang_lsp)
+		vim.lsp.enable("erlang_lsp")
 	else
 		vim.notify(
 			("NVIM_ERLANG_LSP=%s but `%s` not found on PATH"):format(erlang_lsp, server),

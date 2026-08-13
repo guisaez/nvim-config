@@ -33,7 +33,7 @@ servers are set up. Profiles are named bundles:
 
 | Profile   | Treesitter parsers | Extra LSP |
 | --------- | ------------------ | --------- |
-| `core`    | bash, lua, luadoc, vim, vimdoc, markdown, markdown_inline, diff, query | — |
+| `core`    | bash, lua, luadoc, vim, vimdoc, markdown, markdown_inline, diff, query, json | — |
 | `web`     | html, css, javascript, typescript, tsx | — |
 | `beam`    | erlang, elixir, heex | `lexical` (Elixir LS via Mason) |
 | `systems` | c, rust, zig, cpp | — |

@@ -13,10 +13,9 @@ local profiles = {
 		"luadoc",
 		"vim",
 		"vimdoc",
-		"markdown",
-		"markdown_inline",
 		"diff",
 		"query",
+        "json-lsp"
 	},
 	web = {
 		"html",
@@ -39,8 +38,7 @@ local profiles = {
 	infra = {
 		"dockerfile",
 		"yaml",
-		"toml",
-		"json",
+		"toml"
 	},
 }
 

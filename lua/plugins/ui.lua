@@ -71,18 +71,6 @@ return {
 		opts = { signs = false },
 	},
 	{
-		"echasnovski/mini.nvim",
-		config = function()
-			require("mini.ai").setup({ n_lines = 500 })
-			require("mini.surround").setup()
-			local statusline = require("mini.statusline")
-			statusline.setup({ use_icons = vim.g.have_nerd_font })
-			statusline.section_location = function()
-				return "%2l:%-2v"
-			end
-		end,
-	},
-	{
 		"nvim-telescope/telescope.nvim",
 		event = "VimEnter",
 		dependencies = {
@@ -177,58 +165,102 @@ return {
 			"MunifTanjim/nui.nvim",
 		},
 	},
-	{
-		"catppuccin/nvim",
-		name = "catppuccin",
-		priority = 1000,
-		opts = {
-			flavour = "frappe",
-			transparent_background = false,
-			term_colors = false,
-			styles = {
-				comments = { "italic" },
-				conditionals = { "italic" },
-				loops = {},
-				functions = {},
-				keywords = { "italic" },
-				strings = {},
-				variables = {},
-				numbers = {},
-				booleans = {},
-				properties = {},
-				types = {},
-				operators = {},
-			},
-			lsp_styles = {
-				virtual_text = {
-					{
-						errors = { "italic" },
-						hints = { "italic" },
-						warnings = { "italic" },
-						information = { "italic" },
-						ok = { "italic" },
-					},
-				},
-				inlay_hints = {
-					background = false,
-				},
-			},
-			auto_integrations = true,
-			integrations = {
-				cmp = true,
-				gitsigns = true,
-				nvimtree = true,
-				mini = {
-					enabled = true,
-				},
-			},
-			custom_highlights = function(_)
-				return {}
-			end,
-		},
-		config = function(_, opts)
-			require("catppuccin").setup(opts)
-			vim.cmd.colorscheme("catppuccin-nvim")
-		end,
-	},
+
+    { "rmehri01/onenord.nvim",
+        priority = 1000,
+        config = function()
+            require("onenord").setup({
+                styles = {
+                    comments = "italic"
+                }
+            })
+            vim.cmd.colorscheme("onenord")
+        end
+    },
+    {
+        "nvim-lualine/lualine.nvim",
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        opts = {
+            theme = 'onenord',
+            sections = {
+                lualine_a = {'mode'},
+                lualine_b = {'branch', 'diff', 'diagnostics'},
+                lualine_c = {'filename'},
+                lualine_x = {'fileformat', 'filetype'},
+                lualine_y = {'progress'},
+                lualine_z = {'location'}
+            },
+            inactive_sections = {
+                lualine_c = {'filename'},
+                lualine_x = {'encoding', 'location'}
+            }
+        }
+    },
+
+	-- {
+	-- 	"ellisonleao/gruvbox.nvim",
+	-- 	priority = 1000,
+	-- 	config = function()
+	-- 		require("gruvbox").setup({
+	--                contrast = "soft",
+	--                transparent_mode = false
+	--            })
+	-- 		vim.cmd.colorscheme("gruvbox")
+	-- 	end,
+	-- },
+
+	-- {
+	-- 	"catppuccin/nvim",
+	-- 	name = "catppuccin",
+	-- 	priority = 1000,
+	-- 	opts = {
+	-- 		flavour = "frappe",
+	-- 		transparent_background = false,
+	-- 		term_colors = false,
+	-- 		styles = {
+	-- 			comments = { "italic" },
+	-- 			conditionals = { "italic" },
+	-- 			loops = {},
+	-- 			functions = {},
+	-- 			keywords = { "italic" },
+	-- 			strings = {},
+	-- 			variables = {},
+	-- 			numbers = {},
+	-- 			booleans = {},
+	-- 			properties = {},
+	-- 			types = {},
+	-- 			operators = {},
+	-- 		},
+	-- 		lsp_styles = {
+	-- 			virtual_text = {
+	-- 				{
+	-- 					errors = { "italic" },
+	-- 					hints = { "italic" },
+	-- 					warnings = { "italic" },
+	-- 					information = { "italic" },
+	-- 					ok = { "italic" },
+	-- 				},
+	-- 			},
+	-- 			inlay_hints = {
+	-- 				background = false,
+	-- 			},
+	-- 		},
+	-- 		auto_integrations = true,
+	-- 		integrations = {
+	-- 			cmp = true,
+	-- 			gitsigns = true,
+	-- 			nvimtree = true,
+	-- 			mini = {
+	-- 				enabled = true,
+	-- 			},
+	-- 		},
+	-- 		custom_highlights = function(_)
+	-- 			return {}
+	-- 		end,
+	-- 	},
+	-- 	config = function(_, opts)
+	-- 		require("catppuccin").setup(opts)
+	-- 		vim.cmd.colorscheme("catppuccin-nvim")
+	-- 	end,
+	-- },
 }

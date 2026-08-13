@@ -5,17 +5,36 @@ return {
 	dependencies = { "folke/snacks.nvim" },
 	opts = {
 		log_level = "error",
+		git_repo_cwd = true,
 		terminal = {
-			split_side = "left",
+			split_side = "right",
 			split_width_percentage = 0.3,
 			auto_close = true,
+			snacks_win_opts = {
+				position = "float",
+				width = 0.8,
+				height = 0.8,
+				border = "rounded",
+				backdrop = 80,
+				keys = {
+					claude_hide = {
+						"<C-,>",
+						function(self)
+							self:hide()
+						end,
+						mode = "t",
+						desc = "Hide Claude",
+					},
+				},
+			},
 		},
 		focus_after_send = true,
 		diff_opts = {
 			layout = "horizontal",
 			open_in_new_tab = true,
 			keep_terminal_focus = false,
-			hide_terminal_in_new_tab = false,
+			hide_terminal_in_new_tab = true,
+			auto_resize_terminal = true,
 		},
 	},
 	config = function(_, opts)
@@ -109,5 +128,6 @@ return {
 		{ "<leader>ap", "<cmd>ClaudePersonal<cr>", desc = "[A]I switch to personal" },
 		{ "<leader>ax", "<cmd>ClaudeDefault<cr>", desc = "[A]I switch to default" },
 		{ "<C-n>", "<C-\\><C-n>", mode = "t", desc = "Exit terminal mode" },
+		{ "<C-,>", "<cmd>ClaudeCodeFocus<cr>", desc = "[A]I toggle floating Claude", mode = { "n", "x" } },
 	},
 }
