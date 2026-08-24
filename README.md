@@ -10,7 +10,7 @@ directory convention).
 init.lua            -- bootstrap: leader keys, lazy.nvim, require("lsp")
 lsp/                -- declarative LSP server configs (auto-loaded by 0.12)
   elp.lua           -- erlang-language-platform (elp)
-  erlangls.lua      -- erlang_ls
+  erlang_ls.lua     -- erlang_ls
 lua/
   lsp.lua           -- Erlang LSP selection logic (reads env)
   plugins/          -- lazy.nvim plugin specs
@@ -72,7 +72,7 @@ one actually starts is decided at startup by `lua/lsp.lua`:
 | `NVIM_ERLANG_LSP` | Server started           | Required binary on `PATH` |
 | ----------------- | ------------------------ | ------------------------- |
 | `elp`             | erlang-language-platform | `elp`                     |
-| `erlangls`        | erlang_ls                | `erlang_ls`               |
+| `erlang_ls`       | erlang_ls                | `erlang_ls`               |
 | unset / other     | none                     | —                         |
 
 If the variable names a server but its binary is missing from `PATH`,
@@ -80,7 +80,7 @@ Neovim starts normally and prints a warning instead of attaching.
 
 - **`elp`** — Meta's [erlang-language-platform](https://github.com/WhatsApp/erlang-language-platform).
   Faster, better diagnostics; preferred for rebar3 projects.
-- **`erlangls`** — [erlang_ls](https://github.com/erlang-ls/erlang_ls).
+- **`erlang_ls`** — [erlang_ls](https://github.com/erlang-ls/erlang_ls).
   More mature, broader feature coverage on older codebases.
 
 ```sh
