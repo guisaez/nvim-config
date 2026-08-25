@@ -14,8 +14,7 @@ local profiles = {
 		"vim",
 		"vimdoc",
 		"diff",
-		"query",
-        "json-lsp"
+		"query"
 	},
 	web = {
 		"html",
