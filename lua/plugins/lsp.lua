@@ -37,6 +37,14 @@ return {
 					map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
 					map("gi", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
 					map("K", vim.lsp.buf.hover, "[H]over documentation")
+
+					-- ELP hover is often sparse; use peek-definition on K instead
+					local ft = vim.bo[event.buf].filetype
+					if ft == "erlang" then
+						map("K", function()
+							require("goto-preview").goto_preview_definition()
+						end, "Peek [D]efinition (Erlang)")
+					end
 					map("<leader>D", require("telescope.builtin").lsp_type_definitions, "[G]oto type [D]efinition")
 					map("<leader>sS", require("telescope.builtin").lsp_document_symbols, "[S]earch document [S]ymbols")
 					map(
@@ -245,6 +253,17 @@ return {
 			snippets = { preset = "default" },
 			fuzzy = { implementation = "lua" },
 			signature = { enabled = true },
+		},
+	},
+
+	{ -- Peek definition / references in a floating window
+		"rmagatti/goto-preview",
+		event = "LspAttach",
+		opts = {
+			width = 120,
+			height = 25,
+			border = "rounded",
+			default_mappings = false, -- we set our own via LspAttach
 		},
 	},
 }

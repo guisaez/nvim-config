@@ -230,7 +230,7 @@ return {
 			gruvbox_material_background = "soft",
 		},
 		config = function()
-			vim.cmd.colorscheme("gruvbox-material")
+			-- vim.cmd.colorscheme("gruvbox-material")
 		end,
 	},
 	{
@@ -253,7 +253,7 @@ return {
                     comments = "italic"
                 }
             })
-            -- vim.cmd.colorscheme("onenord")
+			-- vim.cmd.colorscheme("onenord")
         end
     },
 }
