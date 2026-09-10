@@ -17,6 +17,10 @@ vim.keymap.set({ "n", "v" }, "<leader>p", '"+p')
 vim.keymap.set("n", "<leader>dq", vim.diagnostic.setloclist, { desc = "[d]iagnostic [q]uickfix" })
 vim.keymap.set("n", "<leader>df", vim.diagnostic.open_float, { desc = "[d]iagnostic [f]loat" })
 
+-- Argument list navigation
+vim.keymap.set("n", "]a", "<cmd>next<CR>", { desc = "Next [a]rgument" })
+vim.keymap.set("n", "[a", "<cmd>prev<CR>", { desc = "Prev [a]rgument" })
+
 -- Quickfix / loclist navigation (using ] [ convention)
 vim.keymap.set("n", "]q", "<cmd>cnext<CR>zz", { desc = "Next [q]uickfix" })
 vim.keymap.set("n", "[q", "<cmd>cprev<CR>zz", { desc = "Prev [q]uickfix" })
