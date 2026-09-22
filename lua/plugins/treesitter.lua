@@ -14,7 +14,9 @@ local profiles = {
 		"vim",
 		"vimdoc",
 		"diff",
-		"query"
+		"query",
+		"markdown",
+		"markdown_inline",
 	},
 	web = {
 		"html",

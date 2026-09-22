@@ -1,10 +1,12 @@
 return {
-	"toppair/peek.nvim",
-	event = { "VeryLazy" },
-	build = "deno task --quiet build:fast",
-	config = function()
-		require("peek").setup()
-		vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {})
-		vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
-	end,
+	"MeanderingProgrammer/render-markdown.nvim",
+	ft = "markdown",
+	opts = {
+		enabled = true,
+		-- Skip terminal-mode rendering over SSH; matches the SSH_TTY redraw-cost
+		-- gating in lua/custom/options.lua (relativenumber, cursorline).
+		render_modes = vim.env.SSH_TTY and { "n", "c" } or { "n", "c", "t" },
+		debounce = 100,
+		file_types = { "markdown" },
+	},
 }

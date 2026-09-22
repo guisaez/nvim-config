@@ -225,12 +225,12 @@ return {
 		"sainnhe/gruvbox-material",
 		lazy = false,
 		priority = 1000,
-		opts = {
-			gruvbox_material_enable_italic = true,
-			gruvbox_material_background = "soft",
-		},
 		config = function()
-			-- vim.cmd.colorscheme("gruvbox-material")
+			-- gruvbox-material has no Lua setup(); it's configured via vim.g
+			-- globals, which must be set before the colorscheme is applied.
+			vim.g.gruvbox_material_enable_italic = true
+			vim.g.gruvbox_material_background = "soft"
+			vim.cmd.colorscheme("gruvbox-material")
 		end,
 	},
 	{
@@ -248,12 +248,14 @@ return {
         "rmehri01/onenord.nvim",
         priority = 1000,
         config = function()
-            require("onenord").setup({
-                styles = {
-                    comments = "italic"
-                }
-            })
-			-- vim.cmd.colorscheme("onenord")
+            -- onenord's setup() applies the colorscheme itself as a side effect
+            -- (unlike the others here) — keep it commented out or it will win
+            -- over whichever theme is active below, regardless of load order.
+            -- require("onenord").setup({
+            --     styles = {
+            --         comments = "italic"
+            --     }
+            -- })
         end
     },
 }
