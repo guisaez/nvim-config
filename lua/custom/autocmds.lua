@@ -1,3 +1,7 @@
+vim.filetype.add({
+	extension = { escript = "erlang" },
+})
+
 -- [[ Basic Autocommands ]]
 -- See `:help lua-guide-autocommands`
 --

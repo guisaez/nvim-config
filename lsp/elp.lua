@@ -3,7 +3,7 @@
 return {
 	cmd = { "elp", "server" },
 	filetypes = { "erlang" },
-	root_markers = { "rebar.config", "erlang.mk", ".git" },
+	root_markers = { ".elp.toml", "rebar.config", "erlang.mk", ".git" },
 	settings = {
 		elp = {
 			diagnostics = {
