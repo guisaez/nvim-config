@@ -28,7 +28,9 @@ vim.keymap.set("n", "]l", "<cmd>lnext<CR>zz", { desc = "Next [l]oclist" })
 vim.keymap.set("n", "[l", "<cmd>lprev<CR>zz", { desc = "Prev [l]oclist" })
 
 -- Terminal
-vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { silent = true, desc = "Exit terminal" })
+vim.keymap.set("t", "<C-q>", "<C-\\><C-n>", { silent = true, desc = "Exit terminal" })
+vim.keymap.set("t", "<C-h>", "<C-\\><C-n><C-w>h", { desc = "Terminal: go left" })
+vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l", { desc = "Terminal: go right" })
 
 -- [[ Windows ]]
 vim.keymap.set("n", "<leader>wh", "<C-w>h", { desc = "[w]indow left" })

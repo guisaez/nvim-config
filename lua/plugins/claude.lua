@@ -7,19 +7,54 @@ return {
 		return {
 			log_level = "error",
 			git_repo_cwd = true,
+			focus_after_send = false,
 			terminal = {
-				provider = require("floating-claude").provider,
+				split_side = "right",
+				split_width_percentage = 0.38,
+				provider = "snacks",
 			},
-			focus_after_send = true,
 			diff_opts = {
-				layout = "horizontal",
-				open_in_new_tab = true,
-				keep_terminal_focus = false,
-				hide_terminal_in_new_tab = true,
+				auto_close_on_accept = true,
+				vertical_split = true,
+				open_in_current_tab = true,
 				auto_resize_terminal = true,
 			},
 		}
 	end,
+	keys = {
+		{ "<leader>a", nil, desc = "AI Claude Code" },
+		{ "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
+		{ "<leader>af", "<cmd>ClaudeCodeFocus<cr>", desc = "Focus Claude" },
+		{ "<leader>ar", "<cmd>ClaudeCode --resume<cr>", desc = "Resume session" },
+		{ "<leader>aC", "<cmd>ClaudeCode --continue<cr>", desc = "Continue last" },
+		{ "<leader>am", "<cmd>ClaudeCodeSelectModel<cr>", desc = "Select model" },
+		{ "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>", desc = "Add buffer to context" },
+		{ "<leader>as", "<cmd>ClaudeCodeSend<cr>", mode = "v", desc = "Send selection" },
+		{
+			"<leader>as",
+			"<cmd>ClaudeCodeTreeAdd<cr>",
+			desc = "Add file from tree",
+			ft = { "NvimTree", "neo-tree", "oil", "minifiles" },
+		},
+		{ "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
+		{ "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
+		{ "<leader>aS", "<cmd>ClaudeCodeStatus<cr>", desc = "Connection status" },
+		{ "<leader>ax", "<cmd>ClaudeCodeStop<cr>", desc = "Stop server" },
+		{ "<leader>aX", "<cmd>ClaudeCodeStart<cr>", desc = "Start server" },
+		{ "<leader>aw", "<cmd>ClaudeWork<cr>", desc = "Switch to work profile" },
+		{ "<leader>ap", "<cmd>ClaudePersonal<cr>", desc = "Switch to personal profile" },
+		{ "<leader>aD", "<cmd>ClaudeDefault<cr>", desc = "Switch to default profile" },
+		{ "<leader>al", ":ClaudeCodeAdd % ", desc = "Add buffer w/ line range" },
+		{ "<leader>at", "<cmd>ClaudeToggleProvider<cr>", desc = "Toggle snacks/none (tmux) provider" },
+		{
+			"<C-,>",
+			function()
+				require("floating-claude").toggle_mini()
+			end,
+			mode = { "n", "x" },
+			desc = "[A]I toggle floating Claude",
+		},
+	},
 	config = function(_, opts)
 		local function sync_claude_env(profile)
 			if profile == "default" then
@@ -80,6 +115,12 @@ return {
 			end
 		end
 
+		vim.api.nvim_create_user_command("ClaudeToggleProvider", function()
+			local terminal = require("claudecode.terminal")
+			local new_provider = terminal.defaults.provider == "none" and "snacks" or "none"
+			terminal.defaults.provider = new_provider
+			vim.notify("Claude: terminal provider -> " .. new_provider)
+		end, {})
 		vim.api.nvim_create_user_command("ClaudeWork", function()
 			switch_profile("work")
 		end, {})
@@ -90,35 +131,4 @@ return {
 			switch_profile("default")
 		end, {})
 	end,
-	keys = {
-		{ "<leader>a", nil, desc = "[A]I/Claude" },
-		{ "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "[A]I toggle Claude" },
-		{ "<leader>af", "<cmd>ClaudeCodeFocus<cr>", desc = "[A]I focus Claude" },
-		{ "<leader>ar", "<cmd>ClaudeCode --resume<cr>", desc = "[A]I resume session" },
-		{ "<leader>aC", "<cmd>ClaudeCode --continue<cr>", desc = "[A]I continue session" },
-		{ "<leader>am", "<cmd>ClaudeCodeSelectModel<cr>", desc = "[A]I select model" },
-		{ "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>", desc = "[A]I add current buffer" },
-		{ "<leader>as", "<cmd>ClaudeCodeSend<cr>", mode = "v", desc = "[A]I send selection" },
-		{
-			"<leader>as",
-			"<cmd>ClaudeCodeTreeAdd<cr>",
-			desc = "[A]I add file from tree",
-			ft = { "NvimTree", "neo-tree", "oil", "minifiles", "netrw" },
-		},
-		{ "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "[A]I accept diff" },
-		{ "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "[A]I deny diff" },
-		{ "<leader>aw", "<cmd>ClaudeWork<cr>", desc = "[A]I switch to work" },
-		{ "<leader>ap", "<cmd>ClaudePersonal<cr>", desc = "[A]I switch to personal" },
-		{ "<leader>ax", "<cmd>ClaudeDefault<cr>", desc = "[A]I switch to default" },
-		{ "<C-n>", "<C-\\><C-n>", mode = "t", desc = "Exit terminal mode" },
-		{ "<Esc><Esc>", "<C-\\><C-n>", mode = "t", desc = "Exit terminal mode" },
-		{
-			"<C-,>",
-			function()
-				require("floating-claude").toggle_mini()
-			end,
-			desc = "[A]I toggle floating Claude",
-			mode = { "n", "x" },
-		},
-	},
 }
